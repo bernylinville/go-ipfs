@@ -135,8 +135,9 @@ test_add_dir_with_sharding_enabled_v1 "$SHARDEDV1" big_dir
 test_kill_ipfs_daemon
 
 test_list_incomplete_dir() {
+  input_dir="$1"
   test_expect_success "ipfs add (CIDv1) on very large directory with sha3 succeeds" '
-    ipfs add -r -Q --cid-version=1 --hash=sha3-256 --pin=false testdata > sharddir_out &&
+    ipfs add -r -Q --cid-version=1 --hash=sha3-256 --pin=false "$input_dir" > sharddir_out &&
     largeSHA3dir=$(cat sharddir_out)
   '
 
@@ -146,12 +147,12 @@ test_list_incomplete_dir() {
 
   test_expect_success "can list part of the directory" '
     ipfs ls "$largeSHA3dir" 2> ls_err_out
-    echo "Error: merkledag: not found" > exp_err_out &&
+    echo "Error: failed to fetch all nodes" > exp_err_out &&
     cat ls_err_out &&
     test_cmp exp_err_out ls_err_out
   '
 }
 
-test_list_incomplete_dir
+test_list_incomplete_dir  big_dir
 
 test_done
