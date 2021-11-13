@@ -29,6 +29,10 @@ test_expect_success 'connect A <-> Relay' '
   iptb connect 0 1
 '
 
+test_expect_success 'wait until A gets a reservation' '
+  sleep 1
+'
+
 test_expect_success 'connect B <-> Relay' '
   iptb connect 2 1
 '
